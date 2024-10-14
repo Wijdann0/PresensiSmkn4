@@ -9,7 +9,7 @@
       <div class="col-lg-6 d-flex justify-content-center">
         <div class="card rounded-5 text-center pt-4">
           <h3 class="text-white">Login</h3>
-          <div class="card-body d-flex justify-content-center pt-5">
+          <div class="card-body d-flex justify-content-center pt-3">
             <form @submit.prevent="log">
               <label for="exampleInputEmail"></label>
               <input v-model="email" type="email" class="form-control form-control-lg rounded-3 akn text-center"
@@ -79,7 +79,7 @@ async function log() {
 }
 
 .akn {
-  width: 300px;
+  width: 250px;
   margin-bottom: 30px;
 }
 
@@ -94,8 +94,8 @@ async function log() {
 }
 
 .card {
-  width: 400px;
-  height: 400px;
+  width: 350px;
+  height: 350px;
   box-shadow: 15px 15px 0px 5px gray;
   border: 2px solid gray;
   background: rgb(26, 26, 26);

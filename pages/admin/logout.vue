@@ -7,7 +7,7 @@ const supa = useSupabaseClient()
 
 async function keluar() {
   const { error } = await supa.auth.signOut()
-  if (!error) navigateTo('/')
+  if (!error) navigateTo('/halamanUtama')
 }
 
 

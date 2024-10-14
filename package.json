@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@supabase/auth-js": "^2.65.0",
+    "@supabase/supabase-js": "^2.45.4",
     "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.10.2",
     "jspdf": "^2.5.2",
