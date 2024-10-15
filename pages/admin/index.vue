@@ -23,7 +23,7 @@
                     <h1>Log Activity</h1>
                 </div>
                 <div>
-                    <table border="2">
+                    <table border="2">``
                         <thead>
                             <tr>
                                 <th>No</th>

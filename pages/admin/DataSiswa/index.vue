@@ -6,10 +6,12 @@
                     <nuxt-link to="/admin/" class="text-decoration-none text-light nav-link">Home</nuxt-link>
                 </div>
                 <div class="d-flex justify-content-center p-4">
-                    <nuxt-link to="/admin/DataSiswa/" class="text-decoration-none text-light nav-link">Data Siswa</nuxt-link>
+                    <nuxt-link to="/admin/DataSiswa/" class="text-decoration-none text-light nav-link">Data
+                        Siswa</nuxt-link>
                 </div>
                 <div class="d-flex justify-content-center p-4">
-                    <nuxt-link to="/admin/dataPresensi" class="text-decoration-none text-light nav-link">Data Presensi</nuxt-link>
+                    <nuxt-link to="/admin/dataPresensi" class="text-decoration-none text-light nav-link">Data
+                        Presensi</nuxt-link>
                 </div>
                 <div class="d-flex justify-content-center p-4">
                     <nuxt-link to="#" class="text-decoration-none text-light nav-link">Tambah Admin</nuxt-link>
@@ -26,7 +28,8 @@
                 <!-- Filter Section -->
                 <div class="d-flex justify-content-around p-3">
                     <div>
-                        <input v-model="filterTingkat" id="filterTingkat" placeholder="Pilih Kelas" class="form form-control">
+                        <input v-model="filterTingkat" id="filterTingkat" placeholder="Pilih Kelas"
+                            class="form form-control">
                     </div>
                     <div>
                         <select v-model="filterJurusan" id="filterJurusan" class="form form-control">
@@ -35,7 +38,8 @@
                         </select>
                     </div>
                     <div>
-                        <input v-model="filterKelas" id="filterKelas" placeholder="Pilih No Kelas" class="form form-control">
+                        <input v-model="filterKelas" id="filterKelas" placeholder="Pilih No Kelas"
+                            class="form form-control">
                     </div>
                     <div>
                         <nuxt-link to="/admin/DataSiswa/tambah">
@@ -43,7 +47,7 @@
                         </nuxt-link>
                     </div>
                 </div>
-                
+
                 <div>
                     <table border="2">
                         <thead>
@@ -77,9 +81,11 @@
 
                     <!-- Pagination Controls -->
                     <div class="d-flex justify-content-center mt-5 pb-5">
-                        <button @click="prevPage" :disabled="currentPage === 1" class="btn btn-primary me-2">Previous</button>
+                        <button @click="prevPage" :disabled="currentPage === 1"
+                            class="btn btn-primary me-2">Previous</button>
                         <span>Page {{ currentPage }} of {{ totalPages }}</span>
-                        <button @click="nextPage" :disabled="currentPage === totalPages" class="btn btn-primary ms-2">Next</button>
+                        <button @click="nextPage" :disabled="currentPage === totalPages"
+                            class="btn btn-primary ms-2">Next</button>
                     </div>
                 </div>
             </div>
@@ -89,7 +95,7 @@
 
 <script setup>
 definePageMeta({
-  layout: 'admin'
+    layout: 'admin'
 })
 
 const supabase = useSupabaseClient()
@@ -106,9 +112,15 @@ const filterKelas = ref('')
 // Computed property to filter the data
 const filteredSiswa = computed(() => {
     return siswa.value.filter(siwa => {
-        const matchTingkat = filterTingkat.value ? siwa.tingkat?.toString().toLowerCase().includes(filterTingkat.value.toLowerCase()) : true;
-        const matchJurusan = filterJurusan.value ? siwa.jurusan?.nama.toLowerCase() === filterJurusan.value.toLowerCase() : true;
-        const matchKelas = filterKelas.value ? siwa.kelas?.toLowerCase().includes(filterKelas.value.toLowerCase()) : true;
+        const matchTingkat = filterTingkat.value
+            ? siwa.tingkat && siwa.tingkat.toString().toLowerCase().includes(filterTingkat.value.toLowerCase())
+            : true;
+        const matchJurusan = filterJurusan.value
+            ? siwa.jurusan && siwa.jurusan.nama.toLowerCase() === filterJurusan.value.toLowerCase()
+            : true;
+        const matchKelas = filterKelas.value
+            ? siwa.kelas && siwa.kelas.toString().toLowerCase().includes(filterKelas.value.toLowerCase())
+            : true;
 
         return matchTingkat && matchJurusan && matchKelas;
     });
@@ -141,7 +153,7 @@ const getSiswa = async () => {
     let { data, error } = await supabase
         .from('siswa')
         .select('*, jurusan(nama)')
-    
+
     if (data) {
         // Mengurutkan berdasarkan kelas terlebih dahulu (angka), lalu berdasarkan nama (abjad)
         siswa.value = data.sort((a, b) => {
@@ -174,47 +186,34 @@ const editSiswa = async (siwa) => {
     window.location.href = `/admin/DataSiswa/edit/${id}`;
 }
 
+const deleteSiswa = async (id) => {
+    try {
+        console.log("Deleting siswa with ID:", id);
+
+        const { data, error } = await supabase
+            .from('siswa')
+            .delete()
+            .eq('id', id);
+
+        if (error) {
+            console.error("Error deleting siswa from database:", error.message);
+            alert("Terjadi kesalahan saat menghapus data dari database!");
+        } else {
+            console.log("Siswa deleted successfully from database:", data);  // Data yang dihapus akan tampil di sini
+            siswa.value = siswa.value.filter(siwa => siwa.id !== id);  // Update UI
+            alert("Data siswa berhasil dihapus dari database!");
+        }
+    } catch (err) {
+        console.error("Unexpected error:", err);
+    }
+};
+
 onMounted(() => {
     getSiswa();
     getJurusan();
 });
-
-const deleteSiswa = async (id) => {
-    const confirmation = confirm("Apakah Anda yakin ingin menghapus data siswa ini?");
-    
-    if (confirmation) {
-        try {
-            // Lakukan penghapusan siswa
-            let { data, error } = await supabase
-                .from('siswa')
-                .delete()
-                .eq('id', id);
-
-            if (error) {
-                console.error("Error deleting siswa:", error.message);
-                alert(`Error saat menghapus siswa: ${error.message}`);
-            } else {
-                if (data) {
-                    // Check if data is an array and has items
-                    if (Array.isArray(data) && data.length === 0) {
-                        alert("Tidak ada data yang dihapus."); // Menangani kasus di mana tidak ada baris yang dihapus
-                    } else {
-                        alert('Siswa berhasil dihapus.');
-                        getSiswa(); // Refresh data setelah penghapusan
-                    }
-                } else {
-                    alert("Data tidak tersedia setelah penghapusan."); // Handling for undefined data
-                }
-            }
-        } catch (e) {
-            console.error('Unexpected error:', e);
-            alert('Terjadi kesalahan tak terduga saat menghapus data siswa.');
-        }
-    }
-};
-
-
 </script>
+
 
 <style scoped>
 table {
@@ -223,7 +222,8 @@ table {
     border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
     padding: 10px;
 }
 
