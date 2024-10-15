@@ -79,36 +79,43 @@ const jurusanList = ref([])
 
 // Mendapatkan data siswa berdasarkan ID
 onMounted(async () => {
-  const { id } = route.params
+  const { id } = route.params;
 
-  // Mendapatkan data siswa berdasarkan id
   const { data: siswaData, error: siswaError } = await supabase
     .from('siswa')
     .select('*')
     .eq('id', id)
-    .single()
+    .single();
 
   if (siswaData) {
-    siswa.value = { ...siswaData } // Mengisi form dengan data siswa
+    siswa.value = { ...siswaData };
+    console.log('Siswa data fetched:', siswa.value); // Log untuk memeriksa data siswa
   } else {
-    console.error('Error fetching siswa:', siswaError ? siswaError.message : 'Unknown error')
+    console.error('Error fetching siswa:', siswaError ? siswaError.message : 'Unknown error');
   }
 
   // Mendapatkan list jurusan
   const { data: jurusanData, error: jurusanError } = await supabase
     .from('jurusan')
-    .select('id, nama')
+    .select('id, nama');
 
   if (jurusanData) {
-    jurusanList.value = jurusanData
+    jurusanList.value = jurusanData;
   } else {
-    console.error('Error fetching jurusan:', jurusanError ? jurusanError.message : 'Unknown error')
+    console.error('Error fetching jurusan:', jurusanError ? jurusanError.message : 'Unknown error');
   }
-})
+});
 
-// Function untuk update siswa
 const updateSiswa = async () => {
-  const { id } = route.params
+  const { id } = route.params;
+
+  // Validasi input
+  if (!siswa.value.nis || !siswa.value.nama || !siswa.value.jnskel || !siswa.value.tingkat || !siswa.value.jurusan || !siswa.value.kelas) {
+    alert('Semua field harus diisi!');
+    return;
+  }
+
+  console.log('Siswa before update:', siswa.value); // Log sebelum update
 
   try {
     const { error } = await supabase
@@ -122,21 +129,23 @@ const updateSiswa = async () => {
         kelas: siswa.value.kelas
       })
       .eq('id', id)
-      .select()
+      .select();
 
     if (error) {
-      console.error('Error updating data:', error.message)
-      alert('Gagal memperbarui data siswa.')
-      return
+      console.error('Error updating data:', error.message);
+      alert('Gagal memperbarui data siswa.');
+      return;
     }
 
-    alert('Data siswa berhasil diperbarui!')
-    router.push('/admin/DataSiswa') // Redirect ke halaman DataSiswa setelah update
+    alert('Data siswa berhasil diperbarui!');
+    router.push('/admin/DataSiswa'); // Redirect ke halaman DataSiswa setelah update
   } catch (error) {
-    console.error('Error updating siswa:', error.message)
-    alert('Gagal memperbarui data siswa.')
+    console.error('Error updating siswa:', error.message);
+    alert('Gagal memperbarui data siswa.');
   }
 }
+
+
 </script>
 
 <style scoped>
