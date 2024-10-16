@@ -12,9 +12,6 @@
                     <nuxt-link to="/admin/dataPresensi" class="text-decoration-none text-light nav-link">Data Presensi</nuxt-link>
                 </div>
                 <div class="d-flex justify-content-center p-4">
-                    <nuxt-link to="#" class="text-decoration-none text-light nav-link">Tambah Admin</nuxt-link>
-                </div>
-                <div class="d-flex justify-content-center p-4">
                     <nuxt-link to="#" class="text-decoration-none text-light nav-link">Data Admin</nuxt-link>
                 </div>
             </div>
@@ -23,7 +20,7 @@
                     <h1>Log Activity</h1>
                 </div>
                 <div>
-                    <table border="2">``
+                    <table border="2">
                         <thead>
                             <tr>
                                 <th>No</th>

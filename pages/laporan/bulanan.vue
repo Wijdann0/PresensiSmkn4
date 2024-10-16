@@ -19,7 +19,7 @@
     <div class="row d-flex justify-content-center pb-5" id="filter">
       <div class="col-6 col-sm-3 mb-2">
         <p class="text-white text-center">Tanggal</p>
-        <input v-model="tgl_awal" type="date" class="form-control form-control-lg">
+        <input v-model="tgl_awal" type="month" class="form-control form-control-lg">
       </div>
       <div class="col-6 col-sm-3 mb-2">
         <p class="text-white text-center">Kelas</p>
@@ -42,28 +42,34 @@
 
     <div class="container pp" id="content">
       <div class="text-center mb-5 text-light">
-        <h1>Presensi</h1>
+        <h1 style="font-weight: bold;">Presensi Bulanan</h1>
         <p>Kelas: {{ tingkat }} {{ jurusan }} {{ kelas }}</p>
-        <p>Tanggal: {{ tgl_awal || today }}</p>
+        <p>Bulan: {{ tgl_awal || today }}</p>
       </div>
       <div class="table-container">
         <table id="presensiTable" class="table table-bordered text-white">
           <thead>
             <tr class="b">
               <th>No</th>
-              <th>Tanggal</th>
               <th>Nama</th>
-              <th>Keterangan</th>
+              <th>S</th>
+              <th>I</th>
+              <th>A</th>
+              <th>Jumlah</th>
               <th>Kelas</th>
+              <th>Total Hadir Pada Bulan Ini</th> <!-- Kolom Total Hari -->
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(visitor, i) in filteredVisitors" :key="i">
+            <tr v-for="(visitor, i) in groupedVisitors" :key="i">
               <td>{{ i + 1 }}</td>
-              <td>{{ visitor.tanggal }}</td>
-              <td>{{ visitor.siswa?.nama || 'Tidak ada data' }}</td>
-              <td>{{ visitor.keterangan?.nama || 'Tidak ada data' }}</td>
-              <td>{{ visitor.siswa?.tingkat || 'N/A' }} {{ visitor.jurusan?.nama || 'N/A' }} {{ visitor.siswa?.kelas || 'N/A' }}</td>
+              <td>{{ visitor.nama }}</td>
+              <td>{{ visitor.sakit }}</td>
+              <td>{{ visitor.izin }}</td>
+              <td>{{ visitor.alfa }}</td>
+              <td>{{ visitor.total }}</td>
+              <td>{{ visitor.keterangan }}</td>
+              <td>{{ visitor.totalHari }}</td> 
             </tr>
           </tbody>
         </table>
@@ -86,8 +92,12 @@ const getTodayDate = () => {
   return `${yyyy}-${mm}-${dd}`;
 };
 
+const getDaysInMonth = (year, month) => {
+  return new Date(year, month, 0).getDate(); // Mendapatkan jumlah hari dalam bulan
+};
+
 const supabaseUrl = 'https://lagwvzegjurpjhjvbwca.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxhZ3d2emVnanVycGpoanZid2NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjQwMzMyNTIsImV4cCI6MjAzOTYwOTI1Mn0.XrdQtFfHp4mxuJjtxE810KZnsWIS47wyc5uYY4r_KmQ';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxhZ3d2emVnanVycGpoanZid2NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjQwMzMyNTIsImV4cCI6MjAzOTYwOTI1Mn0.XrdQtFfHp4mxuJjtxE810KZnsWIS47wyc5uYY4r_KmQ'; // Ganti dengan key Anda
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const visitors = ref([]);
@@ -98,7 +108,6 @@ const kelas = ref("");
 const jurusanOptions = ref([]);
 const today = getTodayDate();
 
-
 const getPresensi = async (tanggal = today) => {
   try {
     let query = supabase
@@ -106,10 +115,15 @@ const getPresensi = async (tanggal = today) => {
       .select("tanggal, siswa(id, nama, tingkat, kelas), keterangan(nama), jurusan(nama)");
 
     if (tanggal) {
-      query = query.eq("tanggal", tanggal);
+      const [year, month] = tanggal.split("-");
+      const startDate = `${year}-${month}-01`;
+      const endDate = `${year}-${month}-${getDaysInMonth(year, month)}`;
+      query = query.gte("tanggal", startDate).lte("tanggal", endDate);
     }
 
     const { data, error } = await query;
+
+    console.log("Data fetched:", data); // Tambahkan log ini
 
     if (error) {
       console.error("Error fetching data:", error);
@@ -123,29 +137,67 @@ const getPresensi = async (tanggal = today) => {
 
 
 onMounted(() => {
-  getPresensi();  
+  getPresensi();
   getJurusanOptions();
 });
-
 
 watch(tgl_awal, (newDate) => {
   if (newDate) {
     getPresensi(newDate);
   } else {
-    getPresensi(); 
+    getPresensi();
   }
 });
 
-
+// Filter berdasarkan input bulan, kelas, jurusan, no kelas
 const filteredVisitors = computed(() => {
   return visitors.value.filter((visitor) => {
-    const matchTanggal = !tgl_awal.value || visitor.tanggal === tgl_awal.value;
+    const matchTanggal = !tgl_awal.value || visitor.tanggal.startsWith(tgl_awal.value);
     const matchTingkat = !tingkat.value || visitor.siswa?.tingkat === tingkat.value;
     const matchJurusan = !jurusan.value || visitor.jurusan?.nama === jurusan.value;
     const matchKelas = !kelas.value || visitor.siswa?.kelas === kelas.value;
 
     return matchTanggal && matchTingkat && matchJurusan && matchKelas;
   });
+});
+
+// Kelompokkan pengunjung setelah filter diterapkan
+const groupedVisitors = computed(() => {
+  const result = {};
+  filteredVisitors.value.forEach((visitor) => {
+    const nama = visitor.siswa?.nama || "Tidak ada data";
+    const year = tgl_awal.value.split("-")[0];
+    const month = parseInt(tgl_awal.value.split("-")[1]);
+
+    if (!result[nama]) {
+      result[nama] = {
+        nama,
+        sakit: 0,
+        izin: 0,
+        alfa: 0,
+        total: 0,
+        totalHari: getDaysInMonth(year, month), // Menghitung total hari dalam bulan
+        keterangan: visitor.siswa?.tingkat + ' ' + visitor.jurusan?.nama + ' ' + visitor.siswa?.kelas
+      };
+    }
+
+    if (visitor.keterangan?.nama === 'Sakit') {
+      result[nama].sakit += 1;
+    } else if (visitor.keterangan?.nama === 'Izin') {
+      result[nama].izin += 1;
+    } else if (visitor.keterangan?.nama === 'Alpa') {
+      result[nama].alfa += 1;
+    }
+
+    result[nama].total = result[nama].sakit + result[nama].izin + result[nama].alfa;
+  });
+
+  // Menghitung total hari yang dikurangi dengan jumlah sakit, izin, dan alfa
+  Object.values(result).forEach((visitor) => {
+    visitor.totalHari -= visitor.total;
+  });
+
+  return Object.values(result).sort((a, b) => a.nama.localeCompare(b.nama));
 });
 
 const printPage = () => {
@@ -193,23 +245,21 @@ const downloadPDF = () => {
     }
 
     // Simpan file PDF dengan nama sesuai tanggal
-    pdf.save(`presensi_harian_${chosenDate}_${chosenKelas}.pdf`);
+    pdf.save(`presensi_bulanan_${chosenDate}_${chosenKelas}.pdf`);
   });
 };
 
 const getJurusanOptions = async () => {
   try {
-    const { data, error } = await supabase
-      .from("jurusan")
-      .select("*");
+    const { data, error } = await supabase.from('jurusan').select('id, nama');
 
     if (error) {
-      console.error("Error fetching jurusan data:", error);
+      console.error('Error fetching jurusan options:', error);
     } else {
-      jurusanOptions.value = data;
+      jurusanOptions.value = data || [];
     }
   } catch (error) {
-    console.error("Unexpected error:", error);
+    console.error('Unexpected error:', error);
   }
 };
 </script>
@@ -337,11 +387,9 @@ tbody tr:nth-child(odd) {
     top: 0;
     left: 0;
     right: 0;
-    padding: 20px; /* Tambahkan padding untuk konten */
+    padding: 10px; /* Tambahkan padding untuk konten */
   }
-  th:nth-child(2), td:nth-child(2) {
-    display: none !important;
-  }
+
 
   /* Sembunyikan elemen navbar dan filter */
   #navbar,
@@ -359,7 +407,7 @@ tbody tr:nth-child(odd) {
 
   th, td {
     border: 1px solid black;
-    padding: 8px;
+    padding: 6px;
     text-align: center;
   }
 
@@ -370,7 +418,7 @@ tbody tr:nth-child(odd) {
 
   h1, p {
     color: black;
-    text-align: center; /* Atur warna dan perataan teks */
+    text-align: center;
   }
 }
 

@@ -12,9 +12,6 @@
                     <nuxt-link to="/admin/dataPresensi" class="text-decoration-none text-light nav-link">Data Presensi</nuxt-link>
                 </div>
                 <div class="d-flex justify-content-center p-4">
-                    <nuxt-link to="#" class="text-decoration-none text-light nav-link">Tambah Admin</nuxt-link>
-                </div>
-                <div class="d-flex justify-content-center p-4">
                     <nuxt-link to="#" class="text-decoration-none text-light nav-link">Data Admin</nuxt-link>
                 </div>
             </div>
@@ -210,11 +207,11 @@ const deleteSiswa = async (id) => {
 
         if (error) {
             console.error("Error deleting siswa from database:", error.message);
-            alert("Terjadi kesalahan saat menghapus data dari database!");
+            alert("Terjadi kesalahan saat menghapus Siswa");
         } else {
             console.log("Siswa deleted successfully from database:", data);
             siswa.value = siswa.value.filter(siwa => siwa.id !== id);
-            alert("Data siswa berhasil dihapus dari database!");
+            alert("Siswa Berhasil Di Hapus");
         }
     } catch (err) {
         console.error("Unexpected error:", err);
