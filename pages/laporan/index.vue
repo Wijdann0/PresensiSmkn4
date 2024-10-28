@@ -42,7 +42,7 @@
 
     <div class="container pp" id="content">
       <div class="text-center mb-5 text-light">
-        <h1>Presensi</h1>
+        <h1>Presensi Harian</h1>
         <p>Kelas: {{ tingkat }} {{ jurusan }} {{ kelas }}</p>
         <p>Tanggal: {{ tgl_awal || today }}</p>
       </div>
@@ -63,12 +63,31 @@
               <td>{{ visitor.tanggal }}</td>
               <td>{{ visitor.siswa?.nama || 'Tidak ada data' }}</td>
               <td>{{ visitor.keterangan?.nama || 'Tidak ada data' }}</td>
-              <td>{{ visitor.siswa?.tingkat || 'N/A' }} {{ visitor.jurusan?.nama || 'N/A' }} {{ visitor.siswa?.kelas || 'N/A' }}</td>
+              <td>{{ visitor.siswa?.tingkat || 'N/A' }} {{ visitor.jurusan?.nama || 'N/A' }} {{ visitor.siswa?.kelas ||
+                'N/A' }}</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
+      <div class="signature-section">
+          <div class="row text-white">
+            <div class="col-6 text-center">
+              <p>Mengetahui</p>
+              <p>Kepala Sekolah</p>
+              <br><br>
+              <p>(KURNIAWAN, S.Pd., M.Pd.)</p>
+              <p>NIP 19720809199271002</p>
+            </div>
+            <div class="col-6 text-center">
+              <p>Mengetahui</p>
+              <p>Wali Kelas</p>
+              <br><br>
+              <p>(...................................................)</p>
+              <p>NIP</p>
+            </div>
+          </div>
+        </div>
   </div>
 </template>
 
@@ -123,7 +142,7 @@ const getPresensi = async (tanggal = today) => {
 
 
 onMounted(() => {
-  getPresensi();  
+  getPresensi();
   getJurusanOptions();
 });
 
@@ -132,7 +151,7 @@ watch(tgl_awal, (newDate) => {
   if (newDate) {
     getPresensi(newDate);
   } else {
-    getPresensi(); 
+    getPresensi();
   }
 });
 
@@ -197,6 +216,7 @@ const downloadPDF = () => {
   });
 };
 
+
 const getJurusanOptions = async () => {
   try {
     const { data, error } = await supabase
@@ -215,12 +235,14 @@ const getJurusanOptions = async () => {
 </script>
 
 <style scoped>
-
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -230,22 +252,26 @@ html, body {
 
 .container-fluid {
   background-color: rgb(26, 26, 26);
-  min-height: 100vh; 
+  min-height: 100vh;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden; 
+  overflow-x: hidden;
 }
 
 .row {
   margin-right: 0;
-  margin-left: 0; /* Menghapus margin di sisi row */
+  margin-left: 0;
+  /* Menghapus margin di sisi row */
 }
 
-.col-12, .col-sm-6, .col-md-3 {
+.col-12,
+.col-sm-6,
+.col-md-3 {
   padding-right: 0;
-  padding-left: 0; /* Menghapus padding di sisi kolom */
+  padding-left: 0;
+  /* Menghapus padding di sisi kolom */
 }
 
 /* Untuk memastikan tabel bisa discroll jika tidak cukup ruang */
@@ -259,38 +285,48 @@ table {
   border-collapse: collapse;
 }
 
-th, td {
-  text-align: center;
+th,
+td {
+  text-align: left;
   padding: 8px;
-  white-space: nowrap; /* Hindari wrap teks */
+  white-space: nowrap;
+  /* Hindari wrap teks */
 }
 
 thead {
-  background-color: #333; /* Warna background header tabel */
-  color: #fff; /* Warna teks header */
+  background-color: #333;
+  /* Warna background header tabel */
+  color: #fff;
+  /* Warna teks header */
 }
 
 tbody tr:nth-child(even) {
-  background-color: #2c2c2c; /* Warna latar untuk baris genap */
+  background-color: #2c2c2c;
+  /* Warna latar untuk baris genap */
 }
 
 tbody tr:nth-child(odd) {
-  background-color: #1a1a1a; /* Warna latar untuk baris ganjil */
+  background-color: #1a1a1a;
+  /* Warna latar untuk baris ganjil */
 }
 
 /* Responsif untuk perangkat mobile */
 @media (max-width: 768px) {
+
   /* Mengecilkan font di layar kecil */
-  th, td {
-    font-size: 12px; /* Ukuran font lebih kecil */
-    padding: 6px; /* Padding lebih kecil */
+  th,
+  td {
+    font-size: 12px;
+    /* Ukuran font lebih kecil */
+    padding: 6px;
+    /* Padding lebih kecil */
   }
 
   /* Opsional: mengecilkan tabel lebih jauh untuk layar yang sangat kecil */
   table {
     font-size: 0.9rem;
   }
-  
+
   /* Jika tabel terlalu lebar, tambahkan overflow scroll */
   .table-container {
     overflow-x: scroll;
@@ -299,25 +335,34 @@ tbody tr:nth-child(odd) {
 
 /* Responsif untuk layar yang sangat kecil (max-width: 480px) */
 @media (max-width: 480px) {
-  th, td {
-    font-size: 10px; /* Ukuran font lebih kecil */
-    padding: 4px; /* Padding lebih kecil */
+
+  th,
+  td {
+    font-size: 10px;
+    /* Ukuran font lebih kecil */
+    padding: 4px;
+    /* Padding lebih kecil */
   }
 
   table {
-    font-size: 0.8rem; /* Ukuran tabel lebih kecil */
+    font-size: 0.8rem;
+    /* Ukuran tabel lebih kecil */
   }
 }
 
 
 @media (max-width :768px) {
-    input::placeholder, option::placeholder{
-      font-size: 20px;
-    }
+
+  input::placeholder,
+  option::placeholder {
+    font-size: 20px;
+  }
 }
 
-@media (max-width : 480px){
-  input::placeholder, option::placeholder{
+@media (max-width : 480px) {
+
+  input::placeholder,
+  option::placeholder {
     font-size: 16px;
     justify-content: center
   }
@@ -326,20 +371,26 @@ tbody tr:nth-child(odd) {
 
 @media print {
   body * {
-    visibility: hidden; /* Sembunyikan semua elemen */
+    visibility: hidden;
+    /* Sembunyikan semua elemen */
   }
 
-  #content, #content * {
-    visibility: visible; /* Hanya tampilkan konten */
+  #content,
+  #content * {
+    visibility: visible;
+    /* Hanya tampilkan konten */
   }
 
   #content {
     top: 0;
     left: 0;
     right: 0;
-    padding: 20px; /* Tambahkan padding untuk konten */
+    padding: 20px;
+    /* Tambahkan padding untuk konten */
   }
-  th:nth-child(2), td:nth-child(2) {
+
+  th:nth-child(2),
+  td:nth-child(2) {
     display: none !important;
   }
 
@@ -347,7 +398,8 @@ tbody tr:nth-child(odd) {
   #navbar,
   #filter,
   .btn {
-    display: none !important; /* Pastikan semua elemen ini tidak tampil */
+    display: none !important;
+    /* Pastikan semua elemen ini tidak tampil */
   }
 
   table {
@@ -357,7 +409,8 @@ tbody tr:nth-child(odd) {
     border: 2px solid black;
   }
 
-  th, td {
+  th,
+  td {
     border: 1px solid black;
     padding: 8px;
     text-align: center;
@@ -368,11 +421,25 @@ tbody tr:nth-child(odd) {
     background-color: #f2f2f2;
   }
 
-  h1, p {
+  h1,
+  p {
     color: black;
-    text-align: center; /* Atur warna dan perataan teks */
+    text-align: center;
+    /* Atur warna dan perataan teks */
   }
 }
+.signature-section {
+  margin-top: 60px;
+  font-size: 14px;
+}
 
+.signature-section .row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.signature-section .col-6 {
+  width: 45%;
+}
 
 </style>
