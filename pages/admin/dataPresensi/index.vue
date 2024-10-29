@@ -6,13 +6,16 @@
                     <nuxt-link to="/admin/" class="text-decoration-none text-light nav-link">Home</nuxt-link>
                 </div>
                 <div class="d-flex justify-content-center p-4">
-                    <nuxt-link to="/admin/DataSiswa/" class="text-decoration-none text-light nav-link">Data Siswa</nuxt-link>
+                    <nuxt-link to="/admin/DataSiswa/" class="text-decoration-none text-light nav-link">Data
+                        Siswa</nuxt-link>
                 </div>
                 <div class="d-flex justify-content-center p-4">
-                    <nuxt-link to="/admin/dataPresensi" class="text-decoration-none text-light nav-link">Data Presensi</nuxt-link>
+                    <nuxt-link to="/admin/dataPresensi" class="text-decoration-none text-light nav-link">Data
+                        Presensi</nuxt-link>
                 </div>
                 <div class="d-flex justify-content-center p-4">
-                    <nuxt-link to="#" class="text-decoration-none text-light nav-link">Data Admin</nuxt-link>
+                    <nuxt-link to="/admin/dataUsers/" class="text-decoration-none text-light nav-link">Data
+                        Users</nuxt-link>
                 </div>
             </div>
             <div class="col-9 bg-danger-subtle">
@@ -34,16 +37,19 @@
                                 <td>{{ i + 1 + (currentPage - 1) * perPage }}</td>
                                 <td>{{ visitor.tanggal }}</td>
                                 <td>{{ visitor.siswa.nama }}</td>
-                                <td>{{ visitor.siswa?.tingkat }} {{ visitor.jurusan?.nama }} {{ visitor.siswa?.kelas }}</td>
+                                <td>{{ visitor.siswa?.tingkat }} {{ visitor.jurusan?.nama }} {{ visitor.siswa?.kelas }}
+                                </td>
                             </tr>
                         </tbody>
                     </table>
 
                     <!-- Pagination Controls -->
                     <div class="d-flex justify-content-center mt-5 pb-5">
-                        <button @click="prevPage" :disabled="currentPage === 1" class="btn btn-primary me-2">Previous</button>
+                        <button @click="prevPage" :disabled="currentPage === 1"
+                            class="btn btn-primary me-2">Previous</button>
                         <span>Page {{ currentPage }} of {{ totalPages }}</span>
-                        <button @click="nextPage" :disabled="currentPage === totalPages" class="btn btn-primary ms-2">Next</button>
+                        <button @click="nextPage" :disabled="currentPage === totalPages"
+                            class="btn btn-primary ms-2">Next</button>
                     </div>
                 </div>
             </div>
@@ -53,7 +59,7 @@
 
 <script setup>
 definePageMeta({
-  layout: 'admin'
+    layout: 'admin'
 })
 
 const supabase = useSupabaseClient()
@@ -87,11 +93,11 @@ const getlogActivity = async () => {
 
 // Fungsi untuk memformat waktu login
 const formatDate = (dateString) => {
-    const options = { 
+    const options = {
         year: 'numeric',
         month: 'long',
-        day: 'numeric', 
-        hour: '2-digit', 
+        day: 'numeric',
+        hour: '2-digit',
         minute: '2-digit',
         timeZone: 'Asia/Jakarta'
     }
@@ -132,7 +138,8 @@ table {
     border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
     padding: 10px;
 }
 
@@ -159,9 +166,13 @@ tr:nth-child(even) {
 
 /* Efek ketika kursor hover di atas link navigasi */
 .nav-link:hover {
-    background-color: #ff0000; /* Warna background berubah menjadi abu-abu terang */
-    color: #007bff;           /* Warna teks berubah menjadi biru */
-    font-weight: bold;         /* Membuat teks lebih tebal saat hover */
-    cursor: pointer;           /* Menampilkan pointer ketika hover */
+    background-color: #ff0000;
+    /* Warna background berubah menjadi abu-abu terang */
+    color: #007bff;
+    /* Warna teks berubah menjadi biru */
+    font-weight: bold;
+    /* Membuat teks lebih tebal saat hover */
+    cursor: pointer;
+    /* Menampilkan pointer ketika hover */
 }
 </style>

@@ -6,13 +6,16 @@
                     <nuxt-link to="/admin/" class="text-decoration-none text-light nav-link">Home</nuxt-link>
                 </div>
                 <div class="d-flex justify-content-center p-4">
-                    <nuxt-link to="/admin/DataSiswa/" class="text-decoration-none text-light nav-link">Data Siswa</nuxt-link>
+                    <nuxt-link to="/admin/DataSiswa/" class="text-decoration-none text-light nav-link">Data
+                        Siswa</nuxt-link>
                 </div>
                 <div class="d-flex justify-content-center p-4">
-                    <nuxt-link to="/admin/dataPresensi" class="text-decoration-none text-light nav-link">Data Presensi</nuxt-link>
+                    <nuxt-link to="/admin/dataPresensi" class="text-decoration-none text-light nav-link">Data
+                        Presensi</nuxt-link>
                 </div>
                 <div class="d-flex justify-content-center p-4">
-                    <nuxt-link to="#" class="text-decoration-none text-light nav-link">Data Admin</nuxt-link>
+                    <nuxt-link to="/admin/dataUsers/" class="text-decoration-none text-light nav-link">Data
+                        Users</nuxt-link>
                 </div>
             </div>
             <div class="col-9 bg-danger-subtle">
@@ -23,7 +26,8 @@
                 <!-- Filter Section -->
                 <div class="d-flex justify-content-around p-3">
                     <div>
-                        <input v-model="filterTingkat" id="filterTingkat" placeholder="Pilih Kelas" class="form form-control">
+                        <input v-model="filterTingkat" id="filterTingkat" placeholder="Pilih Kelas"
+                            class="form form-control">
                     </div>
                     <div>
                         <select v-model="filterJurusan" id="filterJurusan" class="form form-control">
@@ -32,7 +36,8 @@
                         </select>
                     </div>
                     <div>
-                        <input v-model="filterKelas" id="filterKelas" placeholder="Pilih No Kelas" class="form form-control">
+                        <input v-model="filterKelas" id="filterKelas" placeholder="Pilih No Kelas"
+                            class="form form-control">
                     </div>
                     <div>
                         <nuxt-link to="/admin/DataSiswa/tambah">
@@ -76,9 +81,11 @@
 
                     <!-- Pagination Controls -->
                     <div class="d-flex justify-content-center mt-5 pb-5">
-                        <button @click="prevPage" :disabled="currentPage === 1" class="btn btn-primary me-2">Previous</button>
+                        <button @click="prevPage" :disabled="currentPage === 1"
+                            class="btn btn-primary me-2">Previous</button>
                         <span>Page {{ currentPage }} of {{ totalPages }}</span>
-                        <button @click="nextPage" :disabled="currentPage === totalPages" class="btn btn-primary ms-2">Next</button>
+                        <button @click="nextPage" :disabled="currentPage === totalPages"
+                            class="btn btn-primary ms-2">Next</button>
                     </div>
                 </div>
             </div>

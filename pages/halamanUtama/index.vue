@@ -3,7 +3,7 @@
     <div class="row my-5 d-flex justify-content-around mt-3 atas">
       <div class="col-12 col-sm-6 col-lg-4 mb-5">
         <nuxt-link to="/presensi" class="text-decoration-none">
-          <div class="card bg-isiPresensi rounded-5 text-light mx-2"> 
+          <div class="card bg-isiPresensi rounded-5 text-light mx-2">
             <div class="card-body d-flex justify-content-center align-items-center">
               <h2 class="">Isi Presensi</h2>
             </div>
@@ -12,7 +12,7 @@
       </div>
       <div class="col-12 col-sm-6 col-lg-4 mb-5">
         <nuxt-link to="/laporan" class="text-decoration-none">
-          <div class="card bg-laporanMingguan rounded-5 text-light mx-2"> 
+          <div class="card bg-laporanMingguan rounded-5 text-light mx-2">
             <div class="card-body d-flex justify-content-center align-items-center">
               <h2 class="">Laporan</h2>
             </div>
@@ -22,7 +22,7 @@
       <div class="row justify-content-center">
         <div class="col-12 col-sm-6 col-lg-4 mb-5">
           <nuxt-link to="/laporan/bulanan/" class="text-decoration-none">
-            <div class="card bg-laporanMingguan rounded-5 text-light mx-2"> 
+            <div class="card bg-laporanMingguan rounded-5 text-light mx-2">
               <div class="card-body d-flex justify-content-center align-items-center">
                 <h2 class="">Laporan Bulanan</h2>
               </div>
@@ -31,20 +31,20 @@
         </div>
       </div>
     </div>
-    <div class="row pb-3 d-flex justify-content-center-between tombol">
-      <div class="col-6 col-sm-3 text-center">
-        <nuxt-link to="/admin/login/">
-          <button class="btn btn-dark bck mt-2 border-white">Login Admin</button>
-        </nuxt-link>
-      </div>
-      <div class="col-6 col-sm-3 text-center">
+    <div class="row pb-3  tombol">
+      <div class="col-3 col-sm-6  text-center">
         <nuxt-link to="/log/logout">
           <button class="btn btn-dark bck mt-2 border-white">LogOut</button>
         </nuxt-link>
       </div>
+      <div class="col-3 col-sm-6 text-center">
+        <nuxt-link to="/admin/login/">
+          <button class="btn btn-dark bck mt-2 border-white">Login Admin</button>
+        </nuxt-link>
+      </div>
     </div>
-      
-    </div>
+
+  </div>
 </template>
 
 
@@ -56,12 +56,15 @@
 
 html,
 body {
-  height: 100%; /* Memastikan body mengisi tinggi layar */
+  height: 100%;
+  /* Memastikan body mengisi tinggi layar */
 }
 
 .hei {
-  min-height: 100vh; /* Memastikan minimal tinggi container memenuhi tinggi layar */
-  background: rgb(26, 26, 26) !important; /* Menggunakan warna latar belakang */
+  min-height: 100vh;
+  /* Memastikan minimal tinggi container memenuhi tinggi layar */
+  background: rgb(26, 26, 26) !important;
+  /* Menggunakan warna latar belakang */
 }
 
 .card {
@@ -69,7 +72,8 @@ body {
   height: 150px;
   background-color: rgb(26, 26, 26);
   box-shadow: 10px 15px 0px 3px lightblue;
-  transition: width 0.3s, height 0.2s, background-color 0.3s; /* Tambahkan transisi untuk perubahan background */
+  transition: width 0.3s, height 0.2s, background-color 0.3s;
+  /* Tambahkan transisi untuk perubahan background */
   border: 1px solid lightblue;
 }
 
@@ -97,23 +101,26 @@ h2 {
   height: 50px;
 }
 
-.tombol{
+.tombol {
   padding-top: 90px;
 }
 
 /* Responsive Styles */
 @media (max-width: 576px) {
   h2 {
-    font-size: 30px; /* Mengurangi ukuran font pada perangkat kecil */
+    font-size: 30px;
+    /* Mengurangi ukuran font pada perangkat kecil */
   }
 
   /* Menonaktifkan efek hover pada perangkat kecil */
   .card {
-    transition: none; /* Menonaktifkan transisi untuk perangkat kecil */
+    transition: none;
+    /* Menonaktifkan transisi untuk perangkat kecil */
   }
 
   .card:hover {
-    background-color: rgb(9, 82, 141); /* Menetapkan warna latar belakang saat ditekan */
+    background-color: rgb(9, 82, 141);
+    /* Menetapkan warna latar belakang saat ditekan */
     color: black;
     box-shadow: 0 5px #666;
     transform: translateY(4px);
@@ -122,13 +129,15 @@ h2 {
 
 @media (min-width: 576px) and (max-width: 768px) {
   .card {
-    height: 150px; /* Mengurangi tinggi kartu pada perangkat medium */
+    height: 150px;
+    /* Mengurangi tinggi kartu pada perangkat medium */
   }
 }
 
 @media (min-width: 768px) {
   .card {
-    height: 200px; /* Kembali ke tinggi asli pada perangkat besar */
+    height: 200px;
+    /* Kembali ke tinggi asli pada perangkat besar */
   }
 }
 </style>
